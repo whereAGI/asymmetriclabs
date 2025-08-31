@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asymmetric Labs - AI, On Your Terms</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .three-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 9999px;
+            color: rgb(165, 180, 252);
+            font-size: 0.875rem;
+            margin-bottom: 2rem;
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, white, rgb(196, 181, 253), white);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero .subtitle {
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            font-weight: 300;
+            margin-bottom: 1rem;
+            color: rgb(199, 210, 254);
+        }
+
+        .hero .description {
+            font-size: clamp(1.125rem, 3vw, 1.5rem);
+            font-weight: 300;
+            margin-bottom: 2rem;
+            color: rgb(196, 181, 253);
+        }
+
+        .hero .long-description {
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            color: rgb(209, 213, 219);
+            line-height: 1.6;
+            margin-bottom: 3rem;
+            max-width: 64rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 1rem 2rem;
+            font-size: 1.125rem;
+            border-radius: 9999px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: rgb(79, 70, 229);
+            color: white;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary:hover {
+            background: rgb(67, 56, 202);
+            transform: scale(1.05);
+            box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.25);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: rgb(165, 180, 252);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-outline:hover {
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .btn svg {
+            margin-left: 0.5rem;
+            width: 1.25rem;
+            height: 1.25rem;
+            transition: transform 0.3s ease;
+        }
+
+        .btn:hover svg {
+            transform: translateX(0.25rem);
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 5rem 1rem;
+        }
+
+        .section-dark {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .section-subtitle {
+            font-size: clamp(1.125rem, 3vw, 1.25rem);
+            color: rgb(209, 213, 219);
+            text-align: center;
+            margin-bottom: 4rem;
+            max-width: 64rem;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Card Styles */
+        .card {
+            background: rgba(17, 24, 39, 0.5);
+            border: 1px solid rgb(55, 65, 81);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: rgba(99, 102, 241, 0.5);
+            transform: scale(1.05);
+            box-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.2);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .card-description {
+            color: rgb(209, 213, 219);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        /* Grid Layouts */
+        .grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+
+        /* Service Cards */
+        .service-card {
+            background: rgba(17, 24, 39, 0.5);
+            border: 1px solid rgb(55, 65, 81);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .service-card:hover {
+            border-color: rgba(99, 102, 241, 0.5);
+            transform: scale(1.05);
+            box-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.2);
+        }
+
+        .service-number {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: linear-gradient(135deg, rgb(79, 70, 229), rgb(124, 58, 237));
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .service-card:hover .service-number {
+            background: linear-gradient(135deg, rgb(99, 102, 241), rgb(139, 92, 246));
+        }
+
+        .service-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .service-card:hover .service-title {
+            color: rgb(165, 180, 252);
+        }
+
+        .feature-list {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            color: rgb(209, 213, 219);
+        }
+
+        .feature-item::before {
+            content: '✓';
+            color: rgb(99, 102, 241);
+            margin-right: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .use-case {
+            background: linear-gradient(to right, rgba(31, 41, 55, 0.6), rgba(17, 24, 39, 0.6));
+            border: 1px solid rgba(55, 65, 81, 0.5);
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .use-case-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: rgb(165, 180, 252);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+
+        .use-case-text {
+            font-size: 0.75rem;
+            color: rgb(156, 163, 175);
+            font-style: italic;
+            line-height: 1.5;
+        }
+
+        /* Icon Styles */
+        .icon {
+            width: 4rem;
+            height: 4rem;
+            background: rgb(79, 70, 229);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+
+        .icon svg {
+            width: 2rem;
+            height: 2rem;
+            color: white;
+        }
+
+        /* Bullet Points */
+        .bullet-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .bullet-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            color: rgb(209, 213, 219);
+        }
+
+        .bullet-dot {
+            width: 0.5rem;
+            height: 0.5rem;
+            background: rgb(99, 102, 241);
+            border-radius: 50%;
+            margin-right: 0.75rem;
+        }
+
+        /* CTA Section */
+        .cta-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+            margin-top: 3rem;
+        }
+
+        @media (min-width: 640px) {
+            .cta-buttons {
+                flex-direction: row;
+                justify-content: center;
+            }
+        }
+
+        /* Footer */
+        .footer {
+            padding: 3rem 1rem;
+            border-top: 1px solid rgb(31, 41, 55);
+            text-align: center;
+        }
+
+        .footer-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .footer-subtitle {
+            color: rgb(156, 163, 175);
+            margin-bottom: 2rem;
+        }
+
+        .footer-copyright {
+            font-size: 0.875rem;
+            color: rgb(107, 114, 128);
+        }
+
+        /* Blog Links */
+        .blog-link {
+            color: rgb(165, 180, 252);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .blog-link:hover {
+            color: rgb(196, 181, 253);
+        }
+
+        /* Special highlight box */
+        .highlight-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(to right, rgba(79, 70, 229, 0.2), rgba(124, 58, 237, 0.2));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 9999px;
+            padding: 0.75rem 1.5rem;
+            margin-top: 4rem;
+        }
+
+        .highlight-box svg {
+            width: 1.25rem;
+            height: 1.25rem;
+            color: rgb(165, 180, 252);
+        }
+
+        .highlight-text {
+            color: rgb(165, 180, 252);
+            font-weight: 500;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+            
+            .section {
+                padding: 3rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="three-background" id="three-container"></div>
+    
+    <div class="content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <div class="badge">PRIVATE AI ASSISTANTS</div>
+                
+                <h1>Asymmetric Labs</h1>
+                
+                <p class="subtitle">AI, On Your Terms.</p>
+                
+                <p class="description">Enterprise-Grade Privacy and Performance.</p>
+                
+                <div class="long-description">
+                    <p>The world's most demanding organizations—leading banks, healthcare providers, and nations are rapidly shifting to private AI. In 2025, privacy and compliance have become non-negotiable. Asymmetric Labs helps you build and own your own AI assistant, so your data never leaves your infrastructure and your competitive advantage stays in-house.</p>
+                </div>
+                
+                <button class="btn btn-primary" id="get-started-btn">
+                    Get Started
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- Market Section -->
+        <section class="section section-dark">
+            <div class="container">
+                <h2 class="section-title">Why Private AI? The Market is Speaking</h2>
+                <p class="section-subtitle">
+                    The global market for private AI assistants is soaring, forecasted to grow by more than 10x from 2024 to 2034—with enterprise adoption as the primary driver.
+                </p>
+
+                <div class="grid grid-2" style="margin-bottom: 4rem;">
+                    <div class="card">
+                        <h3 class="card-title">Enterprise Preferences</h3>
+                        <p class="card-description">
+                            90% of large enterprises now prefer deploying AI either privately or in hybrid setups, citing privacy, compliance, and reliability as the top reasons.
+                        </p>
+                    </div>
+
+                    <div class="card">
+                        <h3 class="card-title">Top AI Use Cases in 2025</h3>
+                        <div class="card-description">
+                            <ul class="bullet-list" style="margin-top: 1rem;">
+                                <li class="bullet-item">
+                                    <div class="bullet-dot"></div>
+                                    <span>Customer service automation</span>
+                                </li>
+                                <li class="bullet-item">
+                                    <div class="bullet-dot"></div>
+                                    <span>Enterprise data analytics</span>
+                                </li>
+                                <li class="bullet-item">
+                                    <div class="bullet-dot"></div>
+                                    <span>Workflow automation</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="card">
+                    <h3 class="card-title">Key Concerns Driving Adoption</h3>
+                    <div class="grid grid-3" style="margin-top: 1.5rem;">
+                        <div style="text-align: center;">
+                            <div class="icon">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                </svg>
+                            </div>
+                            <h4 style="font-size: 1.125rem; font-weight: 600; color: white; margin-bottom: 0.5rem;">Privacy & Security</h4>
+                            <p style="color: rgb(209, 213, 219);">Protection of proprietary data</p>
+                        </div>
+                        
+                        <div style="text-align: center;">
+                            <div class="icon">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <h4 style="font-size: 1.125rem; font-weight: 600; color: white; margin-bottom: 0.5rem;">Regulatory Compliance</h4>
+                            <p style="color: rgb(209, 213, 219);">GDPR, HIPAA, regional laws</p>
+                        </div>
+                        
+                        <div style="text-align: center;">
+                            <div class="icon">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                            </div>
+                            <h4 style="font-size: 1.125rem; font-weight: 600; color: white; margin-bottom: 0.5rem;">Independence</h4>
+                            <p style="color: rgb(209, 213, 219);">Avoiding third-party lock-in</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title">Our Services for Enterprises</h2>
+                <p class="section-subtitle">
+                    Purpose-built for organizations that need total control, maximum utility, and compliance-first AI.
+                </p>
+
+                <div class="grid" style="grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-bottom: 2rem;">
+                    <div class="service-card">
+                        <div class="service-number">1</div>
+                        <h3 class="service-title">Deploy Private LLMs – On Your Cloud or On-Premises</h3>
+                        <p class="card-description">
+                            Deploy industry-leading Large Language Models (text, vision, image, video) within your secure cloud or on-premises servers.
+                        </p>
+                        
+                        <div style="margin: 1rem 0;">
+                            <h4 style="font-size: 0.875rem; font-weight: 600; color: rgb(165, 180, 252); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem;">Key Benefits</h4>
+                            <ul class="feature-list">
+                                <li class="feature-item">Models tailored for enterprise workloads—scaling from 100s to millions of users</li>
+                                <li class="feature-item">No data leaves your infrastructure; full auditability for compliance</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="use-case">
+                            <div style="display: flex; align-items: flex-start; gap: 0.5rem;">
+                                <svg style="width: 1rem; height: 1rem; color: rgb(165, 180, 252); flex-shrink: 0; margin-top: 0.125rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <div>
+                                    <h4 class="use-case-title">Use Case</h4>
+                                    <p class="use-case-text">A national bank runs a sovereign ChatGPT-like assistant on its own infrastructure, automating internal knowledge management and customer queries while passing regulatory audits.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-number">2</div>
+                        <h3 class="service-title">Finetune AI Models on Your Data & Identity</h3>
+                        <p class="card-description">
+                            Customize opensource models using your proprietary data, procedures, and brand guidelines.
+                        </p>
+                        
+                        <div style="margin: 1rem 0;">
+                            <h4 style="font-size: 0.875rem; font-weight: 600; color: rgb(165, 180, 252); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem;">Key Benefits</h4>
+                            <ul class="feature-list">
+                                <li class="feature-item">Deploy organization-centric chatbots for 24/7 customer support, HR, compliance, and more</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="use-case">
+                            <div style="display: flex; align-items: flex-start; gap: 0.5rem;">
+                                <svg style="width: 1rem; height: 1rem; color: rgb(165, 180, 252); flex-shrink: 0; margin-top: 0.125rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <div>
+                                    <h4 class="use-case-title">Use Case</h4>
+                                    <p class="use-case-text">A healthcare network creates a multilingual AI patient assistant, trained to answer questions using their unique terminology and internal protocols—fully HIPAA compliant.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-number">3</div>
+                        <h3 class="service-title">Intelligent RAG Pipelines for Fresh, Secure Knowledge</h3>
+                        <p class="card-description">
+                            Build Retrieval-Augmented Generation (RAG) systems that connect AI to your latest documents, knowledge bases, and enterprise systems.
+                        </p>
+                        
+                        <div style="margin: 1rem 0;">
+                            <h4 style="font-size: 0.875rem; font-weight: 600; color: rgb(165, 180, 252); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem;">Key Benefits</h4>
+                            <ul class="feature-list">
+                                <li class="feature-item">Ensure every answer uses up-to-date, internal data—no more hallucinations or stale advice</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="use-case">
+                            <div style="display: flex; align-items: flex-start; gap: 0.5rem;">
+                                <svg style="width: 1rem; height: 1rem; color: rgb(165, 180, 252); flex-shrink: 0; margin-top: 0.125rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <div>
+                                    <h4 class="use-case-title">Use Case</h4>
+                                    <p class="use-case-text">A Fortune 500 company enables staff to query live sales, policy, or legal docs with instant, context-aware AI answers.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid" style="grid-template-columns: repeat(2, 1fr); gap: 2rem; max-width: 66.666667%; margin: 0 auto;">
+                    <div class="service-card">
+                        <div class="service-number">4</div>
+                        <h3 class="service-title">Custom AI Agents for Workflow Automation</h3>
+                        <p class="card-description">
+                            Create AI-powered agents that automate complex internal support, compliance reporting, and operational workflows.
+                        </p>
+                        
+                        <div style="margin: 1rem 0;">
+                            <h4 style="font-size: 0.875rem; font-weight: 600; color: rgb(165, 180, 252); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem;">Key Benefits</h4>
+                            <ul class="feature-list">
+                                <li class="feature-item">Integrate with legacy and cloud enterprise systems, reduce operational costs and errors</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="use-case">
+                            <div style="display: flex; align-items: flex-start; gap: 0.5rem;">
+                                <svg style="width: 1rem; height: 1rem; color: rgb(165, 180, 252); flex-shrink: 0; margin-top: 0.125rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <div>
+                                    <h4 class="use-case-title">Use Case</h4>
+                                    <p class="use-case-text">A global supply chain company deploys agents that automatically process RFQ 30% faster by connecting to ERP and CRM systems.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-number">5</div>
+                        <h3 class="service-title">AI Data Analytics Agents: Insights on Demand</h3>
+                        <p class="card-description">
+                            Supercharge your BI stack with private, conversational AI data analysts.
+                        </p>
+                        
+                        <div style="margin: 1rem 0;">
+                            <h4 style="font-size: 0.875rem; font-weight: 600; color: rgb(165, 180, 252); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem;">Key Benefits</h4>
+                            <ul class="feature-list">
+                                <li class="feature-item">Securely analyze unstructured and structured data (reports, transactions, logs), generate visualizations, and answer ad-hoc queries</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="use-case">
+                            <div style="display: flex; align-items: flex-start; gap: 0.5rem;">
+                                <svg style="width: 1rem; height: 1rem; color: rgb(165, 180, 252); flex-shrink: 0; margin-top: 0.125rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <div>
+                                    <h4 class="use-case-title">Use Case</h4>
+                                    <p class="use-case-text">A national ministry uses private AI analytics to spot trends in real time across millions of records, with full audit trails for public trust.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center;">
+                    <div class="highlight-box">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                        </svg>
+                        <span class="highlight-text">Each solution is custom-built for your unique enterprise needs</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Advantage Section -->
+        <section class="section section-dark">
+            <div class="container">
+                <h2 class="section-title">The Asymmetric Labs Advantage</h2>
+
+                <div class="grid grid-3">
+                    <div class="card" style="text-align: center;">
+                        <div class="icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="card-title">Enterprise-Grade Security</h3>
+                        <p class="card-description">Zero data leakage—deployment on your stack, with your controls.</p>
+                    </div>
+
+                    <div class="card" style="text-align: center;">
+                        <div class="icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="card-title">Best-in-Class Compliance</h3>
+                        <p class="card-description">Solutions architected to meet global banking, healthcare, and government requirements.</p>
+                    </div>
+
+                    <div class="card" style="text-align: center;">
+                        <div class="icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="card-title">Performance, Without Compromise</h3>
+                        <p class="card-description">Our open-source and custom-tuned models match or exceed cloud AI performance, at a fraction of the cost.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="section">
+            <div class="container" style="text-align: center; max-width: 64rem;">
+                <h2 class="section-title">Ready to Build Your Own Enterprise AI Assistant?</h2>
+                <p class="section-subtitle">
+                    Connect with Asymmetric Labs for a confidential executive briefing. Discover what private AI can do when it works for you—and only you.
+                </p>
+                
+                <div class="cta-buttons">
+                    <button class="btn btn-primary">
+                        Schedule a Briefing
+                    </button>
+                    <button class="btn btn-outline">
+                        Learn More
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Blog Section -->
+        <section class="section section-dark">
+            <div class="container">
+                <h2 class="section-title">Latest Insights & Updates</h2>
+                <p class="section-subtitle">
+                    Stay informed with the latest developments in private AI, LLM research, and enterprise use cases.
+                </p>
+
+                <div class="grid grid-3">
+                    <div class="card">
+                        <h3 class="card-title">AI Models Revolution 2025</h3>
+                        <p class="card-description">
+                            GPT-5, Claude 4 Opus, and DeepSeek R1 are reshaping enterprise AI with breakthrough reasoning capabilities and 98% cost reductions.
+                        </p>
+                        <a href="https://collabnix.com/comparing-top-ai-models-in-2025-claude-grok-gpt-llama-gemini-and-deepseek-the-ultimate-guide/" target="_blank" rel="noopener noreferrer" class="blog-link">Read More →</a>
+                    </div>
+
+                    <div class="card">
+                        <h3 class="card-title">Fortune 500 AI Adoption</h3>
+                        <p class="card-description">
+                            Over 90% of Fortune 500 companies now use AI solutions, with financial services leading at 67% material impact and healthcare achieving 40-60% efficiency gains.
+                        </p>
+                        <a href="https://www.microsoft.com/en-us/microsoft-cloud/blog/2025/07/24/ai-powered-success-with-1000-stories-of-customer-transformation-and-innovation/" target="_blank" rel="noopener noreferrer" class="blog-link">Read More →</a>
+                    </div>
+
+                    <div class="card">
+                        <h3 class="card-title">Enterprise AI Breakthroughs</h3>
+                        <p class="card-description">
+                            Microsoft's MAI-Voice-1 and DeepSeek's open-weight models are driving $22.3 trillion projected AI impact by 2030, representing 3.7% of global GDP.
+                        </p>
+                        <a href="https://www.mckinsey.com/capabilities/mckinsey-digital/our-insights/superagency-in-the-workplace-empowering-people-to-unlock-ais-full-potential-at-work" target="_blank" rel="noopener noreferrer" class="blog-link">Read More →</a>
+                    </div>
+                </div>
+                
+                <div class="grid grid-2" style="margin-top: 2rem;">
+                    <div class="card">
+                        <h3 class="card-title">Latest Research Papers 2025</h3>
+                        <p class="card-description">
+                            Comprehensive collection of 200+ LLM research papers focusing on reasoning abilities, reinforcement learning, and multimodal capabilities.
+                        </p>
+                        <a href="https://www.coronium.io/blog/ai-models-complete-guide-2025" target="_blank" rel="noopener noreferrer" class="blog-link">Explore Research →</a>
+                    </div>
+
+                    <div class="card">
+                        <h3 class="card-title">Manufacturing AI Success</h3>
+                        <p class="card-description">
+                            Manufacturing companies achieve 20-35% operational cost reduction through AI-powered predictive maintenance and supply chain optimization.
+                        </p>
+                        <a href="https://axis-intelligence.com/enterprise-ai-transformation-guide-roi-2025/" target="_blank" rel="noopener noreferrer" class="blog-link">Learn More →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-title">Asymmetric Labs</div>
+                <p class="footer-subtitle">Private AI Assistants for Enterprises</p>
+                <div class="footer-copyright">
+                    © 2025 Asymmetric Labs. All rights reserved.
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Three.js Background Animation
+        function initThreeBackground() {
+            const container = document.getElementById('three-container');
+            if (!container) return;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(renderer.domElement);
+
+            // Create abstract geometric shapes
+            const geometries = [
+                new THREE.IcosahedronGeometry(1, 0),
+                new THREE.OctahedronGeometry(1, 0),
+                new THREE.TetrahedronGeometry(1, 0),
+                new THREE.SphereGeometry(1, 16, 16),
+                new THREE.BoxGeometry(1, 1, 1),
+            ];
+
+            const materials = [
+                new THREE.MeshBasicMaterial({ 
+                    color: 0x4f46e5, 
+                    wireframe: true, 
+                    transparent: true, 
+                    opacity: 0.1 
+                }),
+                new THREE.MeshBasicMaterial({ 
+                    color: 0x7c3aed, 
+                    wireframe: true, 
+                    transparent: true, 
+                    opacity: 0.1 
+                }),
+                new THREE.MeshBasicMaterial({ 
+                    color: 0x2563eb, 
+                    wireframe: true, 
+                    transparent: true, 
+                    opacity: 0.1 
+                }),
+            ];
+
+            const meshes = [];
+            const particles = [];
+            
+            // Create floating shapes
+            for (let i = 0; i < 15; i++) {
+                const geometry = geometries[Math.floor(Math.random() * geometries.length)];
+                const material = materials[Math.floor(Math.random() * materials.length)];
+                const mesh = new THREE.Mesh(geometry, material);
+                
+                mesh.position.x = (Math.random() - 0.5) * 20;
+                mesh.position.y = (Math.random() - 0.5) * 20;
+                mesh.position.z = (Math.random() - 0.5) * 20;
+                
+                mesh.rotation.x = Math.random() * Math.PI;
+                mesh.rotation.y = Math.random() * Math.PI;
+                
+                mesh.scale.setScalar(Math.random() * 0.5 + 0.5);
+                
+                scene.add(mesh);
+                meshes.push(mesh);
+            }
+
+            // Create particle system
+            const particleGeometry = new THREE.BufferGeometry();
+            const particleCount = 200;
+            const positions = new Float32Array(particleCount * 3);
+            
+            for (let i = 0; i < particleCount * 3; i += 3) {
+                positions[i] = (Math.random() - 0.5) * 30;
+                positions[i + 1] = (Math.random() - 0.5) * 30;
+                positions[i + 2] = (Math.random() - 0.5) * 30;
+                particles.push(new THREE.Vector3(positions[i], positions[i + 1], positions[i + 2]));
+            }
+            
+            particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            
+            const particleMaterial = new THREE.PointsMaterial({
+                color: 0x6366f1,
+                size: 0.05,
+                transparent: true,
+                opacity: 0.3,
+            });
+            
+            const particleSystem = new THREE.Points(particleGeometry, particleMaterial);
+            scene.add(particleSystem);
+
+            camera.position.z = 15;
+
+            // Mouse interaction
+            const mouse = new THREE.Vector2();
+            const targetRotation = new THREE.Vector2();
+            
+            const handleMouseMove = (event) => {
+                mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+                mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            };
+            
+            window.addEventListener('mousemove', handleMouseMove);
+
+            // Animation
+            const animate = () => {
+                requestAnimationFrame(animate);
+                
+                // Smooth mouse following
+                targetRotation.x += (mouse.x * 0.5 - targetRotation.x) * 0.05;
+                targetRotation.y += (mouse.y * 0.5 - targetRotation.y) * 0.05;
+                
+                // Rotate meshes
+                meshes.forEach((mesh, index) => {
+                    mesh.rotation.x += 0.001 + index * 0.0001;
+                    mesh.rotation.y += 0.001 + index * 0.0001;
+                    
+                    // Mouse influence on position
+                    mesh.position.x += (targetRotation.x * 2 - mesh.position.x * 0.1) * 0.01;
+                    mesh.position.y += (targetRotation.y * 2 - mesh.position.y * 0.1) * 0.01;
+                });
+                
+                // Rotate particle system
+                particleSystem.rotation.x += 0.0005;
+                particleSystem.rotation.y += 0.0005;
+                
+                // Mouse influence on particles
+                const positions = particleGeometry.attributes.position.array;
+                for (let i = 0; i < particleCount; i++) {
+                    const i3 = i * 3;
+                    const particle = particles[i];
+                    
+                    particle.x += (targetRotation.x * 3 - particle.x * 0.1) * 0.005;
+                    particle.y += (targetRotation.y * 3 - particle.y * 0.1) * 0.005;
+                    
+                    positions[i3] = particle.x;
+                    positions[i3 + 1] = particle.y;
+                    positions[i3 + 2] = particle.z;
+                }
+                particleGeometry.attributes.position.needsUpdate = true;
+                
+                renderer.render(scene, camera);
+            };
+            
+            animate();
+
+            // Handle resize
+            const handleResize = () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            };
+            
+            window.addEventListener('resize', handleResize);
+
+            // Cleanup function
+            return () => {
+                window.removeEventListener('mousemove', handleMouseMove);
+                window.removeEventListener('resize', handleResize);
+                if (container && renderer.domElement) {
+                    container.removeChild(renderer.domElement);
+                }
+                renderer.dispose();
+            };
+        }
+
+        // Button hover effects
+        function initButtonEffects() {
+            const getStartedBtn = document.getElementById('get-started-btn');
+            if (getStartedBtn) {
+                let isHovered = false;
+                
+                getStartedBtn.addEventListener('mouseenter', () => {
+                    isHovered = true;
+                    const svg = getStartedBtn.querySelector('svg');
+                    if (svg) {
+                        svg.style.transform = 'translateX(0.25rem)';
+                    }
+                });
+                
+                getStartedBtn.addEventListener('mouseleave', () => {
+                    isHovered = false;
+                    const svg = getStartedBtn.querySelector('svg');
+                    if (svg) {
+                        svg.style.transform = 'translateX(0)';
+                    }
+                });
+            }
+        }
+
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            initThreeBackground();
+            initButtonEffects();
+        });
+    </script>
+</body>
+</html>
