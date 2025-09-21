@@ -563,7 +563,7 @@
                 <p class="description">Enterprise-Grade Privacy and Performance.</p>
                 
                 <div class="long-description">
-                    <p>The world's most demanding organizations—leading banks, healthcare providers, and nations are rapidly shifting to private AI. In 2025, privacy and compliance have become non-negotiable. Asymmetric Labs helps you build and own your own AI assistant, so your data never leaves your infrastructure and your competitive advantage stays in-house.</p>
+                    <p>The world's most demanding organizations are rapidly shifting to private AI. In 2025, privacy and compliance have become non-negotiable. Asymmetric Labs helps you deploy your own AI models and agent workflows, so your data never leaves your infrastructure and your competitive advantage stays in-house.</p>
                 </div>
                 
                 <button class="btn btn-primary" id="get-started-btn">
@@ -864,9 +864,9 @@
                     <button class="btn btn-primary">
                         Schedule a Briefing
                     </button>
-                    <button class="btn btn-outline">
+                    <a href="services.html" class="btn btn-outline">
                         Learn More
-                    </button>
+                    </a>
                 </div>
             </div>
         </section>
@@ -1102,7 +1102,7 @@
             };
         }
 
-        // Button hover effects
+        // Button hover effects and scroll functionality
         function initButtonEffects() {
             const getStartedBtn = document.getElementById('get-started-btn');
             if (getStartedBtn) {
@@ -1121,6 +1121,17 @@
                     const svg = getStartedBtn.querySelector('svg');
                     if (svg) {
                         svg.style.transform = 'translateX(0)';
+                    }
+                });
+
+                // Add click event to scroll to services section
+                getStartedBtn.addEventListener('click', () => {
+                    const servicesSection = document.getElementById('services');
+                    if (servicesSection) {
+                        servicesSection.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
                     }
                 });
             }
