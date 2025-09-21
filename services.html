@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Services - Asymmetric Labs</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+      color: white;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    .three-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .content {
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 70vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: 9999px;
+      color: rgb(165, 180, 252);
+      font-size: 0.875rem;
+      margin-bottom: 2rem;
+      background: rgba(99, 102, 241, 0.1);
+    }
+
+    .hero h1 {
+      font-size: clamp(3rem, 8vw, 5rem);
+      font-weight: bold;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(to right, white, rgb(196, 181, 253), white);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero .subtitle {
+      font-size: clamp(1.125rem, 3vw, 1.25rem);
+      color: rgb(209, 213, 219);
+      margin-bottom: 3rem;
+      max-width: 64rem;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Section Styles */
+    .section {
+      padding: 5rem 1rem;
+    }
+
+    .section-dark {
+      background: rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    .section-title {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: white;
+    }
+
+    .section-subtitle {
+      font-size: clamp(1.125rem, 3vw, 1.25rem);
+      color: rgb(209, 213, 219);
+      text-align: center;
+      margin-bottom: 4rem;
+      max-width: 64rem;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Service Cards */
+    .services-grid {
+      display: grid;
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .service-card {
+      background: rgba(17, 24, 39, 0.5);
+      border: 1px solid rgb(55, 65, 81);
+      border-radius: 0.75rem;
+      padding: 2rem;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card.enhanced-card {
+      padding: 2.5rem;
+      background: rgba(17, 24, 39, 0.7);
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(135deg, rgb(79, 70, 229), rgb(124, 58, 237));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .service-card:hover {
+      border-color: rgba(99, 102, 241, 0.5);
+      transform: translateY(-8px);
+      box-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.2);
+    }
+
+    .service-intro {
+      margin-bottom: 2.5rem;
+    }
+
+    .service-content-grid {
+      display: grid;
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .content-section {
+      background: rgba(31, 41, 55, 0.4);
+      border-radius: 15px;
+      padding: 1.5rem;
+      border: 1px solid rgba(55, 65, 81, 0.5);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .section-icon {
+      font-size: 1.5rem;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(99, 102, 241, 0.2);
+      border-radius: 10px;
+    }
+
+    .section-title {
+      color: #ffffff;
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .section-content {
+      color: rgba(209, 213, 219, 0.9);
+      line-height: 1.6;
+    }
+
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .benefit-item {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem;
+      background: rgba(31, 41, 55, 0.3);
+      border-radius: 10px;
+      border: 1px solid rgba(55, 65, 81, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .benefit-item:hover {
+      background: rgba(31, 41, 55, 0.5);
+      border-color: rgba(99, 102, 241, 0.3);
+    }
+
+    .benefit-icon {
+      font-size: 1.2rem;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(99, 102, 241, 0.2);
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+
+    .benefit-content h5 {
+      color: #ffffff;
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin: 0 0 0.5rem 0;
+    }
+
+    .benefit-content p {
+      color: rgba(209, 213, 219, 0.8);
+      font-size: 0.85rem;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .use-cases-section {
+      margin-bottom: 2rem;
+    }
+
+    .accordion-container {
+      margin-top: 1.5rem;
+    }
+
+    .accordion-item {
+      background: rgba(31, 41, 55, 0.4);
+      border: 1px solid rgba(55, 65, 81, 0.5);
+      border-radius: 12px;
+      margin-bottom: 0.5rem;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .accordion-item:hover {
+      border-color: rgba(99, 102, 241, 0.3);
+    }
+
+    .accordion-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: rgba(31, 41, 55, 0.2);
+    }
+
+    .accordion-header:hover {
+      background: rgba(31, 41, 55, 0.4);
+    }
+
+    .accordion-title {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .accordion-icon {
+      font-size: 1.2rem;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(99, 102, 241, 0.2);
+      border-radius: 8px;
+    }
+
+    .accordion-toggle {
+      font-size: 1.5rem;
+      color: rgba(209, 213, 219, 0.6);
+      transition: all 0.3s ease;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(55, 65, 81, 0.3);
+      border-radius: 50%;
+    }
+
+    .accordion-item.active .accordion-toggle {
+      transform: rotate(45deg);
+      color: rgb(99, 102, 241);
+      background: rgba(99, 102, 241, 0.2);
+    }
+
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      background: rgba(17, 24, 39, 0.3);
+    }
+
+    .accordion-item.active .accordion-content {
+      max-height: 200px;
+    }
+
+    .accordion-content p {
+      padding: 1.5rem;
+      margin: 0;
+      color: rgba(209, 213, 219, 0.8);
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    .expertise-section {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(31, 41, 55, 0.5));
+      border-radius: 15px;
+      padding: 1.5rem;
+      border: 1px solid rgba(99, 102, 241, 0.2);
+    }
+
+    .expertise-content {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.5rem;
+    }
+
+    .expertise-icon {
+      font-size: 2rem;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(99, 102, 241, 0.2);
+      border-radius: 12px;
+      flex-shrink: 0;
+    }
+
+    .expertise-text h4 {
+      color: #ffffff;
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin: 0 0 0.8rem 0;
+    }
+
+    .expertise-text p {
+      color: rgba(209, 213, 219, 0.8);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .service-card:hover::before {
+      opacity: 1;
+    }
+
+    .service-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .service-number {
+      width: 3rem;
+      height: 3rem;
+      background: linear-gradient(135deg, rgb(79, 70, 229), rgb(124, 58, 237));
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 1.25rem;
+      flex-shrink: 0;
+      transition: all 0.3s ease;
+    }
+
+    .service-card:hover .service-number {
+      background: linear-gradient(135deg, rgb(99, 102, 241), rgb(139, 92, 246));
+    }
+
+    .service-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: white;
+      margin-bottom: 0.5rem;
+      line-height: 1.2;
+    }
+
+    .service-subtitle {
+      font-size: 0.875rem;
+      color: rgb(165, 180, 252);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .service-description {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: rgb(209, 213, 219);
+      margin-bottom: 1.5rem;
+    }
+
+    .service-features {
+      margin-bottom: 1.5rem;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 0.75rem;
+      font-size: 0.875rem;
+      color: rgb(209, 213, 219);
+    }
+
+    .feature-item::before {
+      content: '✓';
+      color: rgb(99, 102, 241);
+      margin-right: 0.75rem;
+      flex-shrink: 0;
+      font-weight: bold;
+    }
+
+    .impact-section {
+      background: linear-gradient(to right, rgba(31, 41, 55, 0.6), rgba(17, 24, 39, 0.6));
+      border: 1px solid rgba(55, 65, 81, 0.5);
+      border-radius: 0.5rem;
+      padding: 1rem;
+      border-left: 4px solid rgb(99, 102, 241);
+    }
+
+    .impact-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: rgb(165, 180, 252);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .impact-description {
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: rgb(156, 163, 175);
+      font-style: italic;
+    }
+
+    /* CTA Section */
+    .cta-section {
+      padding: 5rem 1rem;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      text-align: center;
+    }
+
+    .cta-title {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: bold;
+      color: white;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .cta-description {
+      font-size: 1.125rem;
+      color: rgb(209, 213, 219);
+      margin-bottom: 2rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 1rem 2rem;
+      font-size: 1.125rem;
+      border-radius: 9999px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+    }
+
+    .btn-primary {
+      background: rgb(79, 70, 229);
+      color: white;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-primary:hover {
+      background: rgb(67, 56, 202);
+      transform: scale(1.05);
+      box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.25);
+    }
+
+    .btn svg {
+      margin-left: 0.5rem;
+      width: 1.25rem;
+      height: 1.25rem;
+      transition: transform 0.3s ease;
+    }
+
+    .btn:hover svg {
+      transform: translateX(0.25rem);
+    }
+
+    /* Footer */
+    .footer {
+      padding: 3rem 1rem;
+      border-top: 1px solid rgb(31, 41, 55);
+      text-align: center;
+    }
+
+    .footer-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: white;
+      margin-bottom: 1rem;
+    }
+
+    .footer-subtitle {
+      color: rgb(156, 163, 175);
+      margin-bottom: 2rem;
+    }
+
+    .footer-copyright {
+      font-size: 0.875rem;
+      color: rgb(107, 114, 128);
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .service-card {
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .service-card:nth-child(1) { animation-delay: 0.1s; }
+    .service-card:nth-child(2) { animation-delay: 0.2s; }
+    .service-card:nth-child(3) { animation-delay: 0.3s; }
+    .service-card:nth-child(4) { animation-delay: 0.4s; }
+    .service-card:nth-child(5) { animation-delay: 0.5s; }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .hero {
+        min-height: 60vh;
+        padding: 2rem 1rem;
+      }
+
+      .section {
+        padding: 3rem 1rem;
+      }
+
+      .service-card {
+        padding: 1.5rem;
+      }
+
+      .service-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+      }
+
+      .service-number {
+        margin: 0 auto;
+      }
+
+      .cta-section {
+        padding: 3rem 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="three-background" id="three-container"></div>
+  
+  <div class="content">
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <div class="badge">ENTERPRISE AI SERVICES</div>
+        
+        <h1>AI Services That Transform Your Business</h1>
+        
+        <p class="subtitle">Enterprise-grade AI solutions designed to unlock your organization's potential through intelligent automation, private deployments, and data-driven insights that keep your competitive advantage in-house.</p>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="section section-dark">
+      <div class="container">
+        
+
+        <div class="services-grid">
+          
+          <!-- Service 1: Private LLM Deployment -->
+          <div class="service-card enhanced-card">
+            <div class="service-header">
+              <div class="service-number">1</div>
+              <div>
+                <h3 class="service-title">Private LLM Deployment</h3>
+                <p class="service-subtitle">Unlocking Secure and Tailored AI for Your Enterprise</p>
+              </div>
+            </div>
+            
+            <div class="service-intro">
+              <p class="service-description">
+                In today's data-driven landscape, leveraging the power of Large Language Models (LLMs) is crucial for innovation and efficiency. However, relying solely on public, cloud-centric LLMs often presents significant challenges regarding data privacy, security, compliance, and customization. Our Private LLM Deployment service offers a transformative solution, enabling organizations to harness advanced AI capabilities while maintaining complete control over their sensitive data and intellectual property.
+              </p>
+            </div>
+
+            <div class="service-content-grid">
+              <div class="content-section">
+                <div class="section-header">
+                  <div class="section-icon">🔒</div>
+                  <h4 class="section-title">What is Private LLM Deployment?</h4>
+                </div>
+                <div class="section-content">
+                  <p>A Private LLM is a custom AI model built and operated within an organization's own infrastructure, rather than through external cloud services or third-party APIs. These models can be open-source (like LLaMA, Mistral, or Falcon) or proprietary, typically running on in-house GPU servers, private data centers, or isolated cloud environments configured to meet stringent internal security and compliance standards. This approach ensures that your data remains within your trusted network, never exposed to external vendors.</p>
+                </div>
+              </div>
+
+              <div class="content-section">
+                <div class="section-header">
+                  <div class="section-icon">⚡</div>
+                  <h4 class="section-title">Why Choose Private LLM Deployment?</h4>
+                </div>
+                <div class="section-content">
+                  <div class="benefits-grid">
+                    <div class="benefit-item">
+                      <div class="benefit-icon">🛡️</div>
+                      <div class="benefit-content">
+                        <h5>Enhanced Data Security & Privacy</h5>
+                        <p>All sensitive data remains under your control, processed within your private infrastructure. Paramount for industries with strict regulatory standards (GDPR, HIPAA, CCPA).</p>
+                      </div>
+                    </div>
+                    <div class="benefit-item">
+                      <div class="benefit-icon">🎯</div>
+                      <div class="benefit-content">
+                        <h5>Tailored & Relevant Results</h5>
+                        <p>Private LLMs understand your industry's exact language, nuances, and context, leading to more accurate and actionable insights.</p>
+                      </div>
+                    </div>
+                    <div class="benefit-item">
+                      <div class="benefit-icon">💰</div>
+                      <div class="benefit-content">
+                        <h5>Operational Independence & Cost Control</h5>
+                        <p>Predictable costs and reduced dependency on external services with potential outages or pricing changes.</p>
+                      </div>
+                    </div>
+                    <div class="benefit-item">
+                      <div class="benefit-icon">🔧</div>
+                      <div class="benefit-content">
+                        <h5>Full Customization & Control</h5>
+                        <p>Complete control over model behavior, data residency policies, and seamless integration with internal systems.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="use-cases-section">
+              <div class="section-header">
+                <div class="section-icon">🚀</div>
+                <h4 class="section-title">Key Business Use Cases</h4>
+              </div>
+              
+              <div class="accordion-container">
+                <div class="accordion-item">
+                  <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-title">
+                      <span class="accordion-icon">📚</span>
+                      <span>Internal Knowledge Management</span>
+                    </div>
+                    <div class="accordion-toggle">+</div>
+                  </div>
+                  <div class="accordion-content">
+                    <p>Create intelligent systems that can reason over hundreds of internal documents, reports, and knowledge bases, providing instant, accurate answers to employee queries. Transform your organizational knowledge into an accessible, AI-powered resource.</p>
+                  </div>
+                </div>
+
+                <div class="accordion-item">
+                  <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-title">
+                      <span class="accordion-icon">🤖</span>
+                      <span>Automated Customer Service & Support</span>
+                    </div>
+                    <div class="accordion-toggle">+</div>
+                  </div>
+                  <div class="accordion-content">
+                    <p>Power chatbots and virtual assistants with deep domain knowledge, enabling them to handle complex customer inquiries, triage tickets, and provide personalized support while keeping customer data secure within your infrastructure.</p>
+                  </div>
+                </div>
+
+                <div class="accordion-item">
+                  <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-title">
+                      <span class="accordion-icon">⚖️</span>
+                      <span>Regulatory Document Analysis</span>
+                    </div>
+                    <div class="accordion-toggle">+</div>
+                  </div>
+                  <div class="accordion-content">
+                    <p>For legal and compliance teams, LLMs can extract key clauses, cite sources, and summarize findings across thousands of pages of legal and regulatory documents, ensuring compliance while maintaining confidentiality.</p>
+                  </div>
+                </div>
+
+                <div class="accordion-item">
+                  <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-title">
+                      <span class="accordion-icon">📊</span>
+                      <span>Financial Risk Modeling & Analysis</span>
+                    </div>
+                    <div class="accordion-toggle">+</div>
+                  </div>
+                  <div class="accordion-content">
+                    <p>Financial analysts can leverage private LLMs to reason over hundreds of earnings reports, regulations, and market trends, building more accurate risk models while keeping sensitive financial data secure.</p>
+                  </div>
+                </div>
+
+                <div class="accordion-item">
+                  <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-title">
+                      <span class="accordion-icon">🔬</span>
+                      <span>Proprietary Research & Development</span>
+                    </div>
+                    <div class="accordion-toggle">+</div>
+                  </div>
+                  <div class="accordion-content">
+                    <p>R&D teams can use AI to retrieve and analyze years of research data for new drug discovery or product development, ensuring sensitive research stays confidential while accelerating innovation cycles.</p>
+                  </div>
+                </div>
+
+                <div class="accordion-item">
+                  <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-title">
+                      <span class="accordion-icon">📈</span>
+                      <span>Personalized Sales & Marketing Insights</span>
+                    </div>
+                    <div class="accordion-toggle">+</div>
+                  </div>
+                  <div class="accordion-content">
+                    <p>Analyze customer behavior and product trends to provide sales and marketing teams with personalized insights, boosting conversion rates and enhancing customer experience through data-driven strategies.</p>
+                  </div>
+                </div>
+
+                <div class="accordion-item">
+                  <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-title">
+                      <span class="accordion-icon">✍️</span>
+                      <span>Content Creation & Summarization</span>
+                    </div>
+                    <div class="accordion-toggle">+</div>
+                  </div>
+                  <div class="accordion-content">
+                    <p>Generate high-quality, contextually appropriate content, summarize lengthy documents, and assist with report generation, all while adhering to internal brand guidelines and data policies.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="expertise-section">
+              <div class="expertise-content">
+                <div class="expertise-icon">🎯</div>
+                <div class="expertise-text">
+                  <h4>Our Expertise</h4>
+                  <p>Our expertise in private LLM deployment ensures your project aligns with your goals, reducing trial-and-error costs and accelerating deployment. We help you leverage the latest pre-trained models and AI frameworks, customizing them to your business needs to significantly reduce development time and costs while improving accuracy for your specific use cases.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Service 2: Model Fine-Tuning -->
+          <div class="service-card enhanced-card">
+            <div class="service-header">
+              <div class="service-number">2</div>
+              <div>
+                <h3 class="service-title">Model Fine-Tuning</h3>
+                <p class="service-subtitle">Domain-Specific AI Optimization</p>
+              </div>
+            </div>
+            
+            <div class="service-intro">
+              <p class="service-description">
+                Model fine-tuning is the process of taking a pre-trained Large Language Model (LLM) and further training it on a smaller, specific dataset to adapt its capabilities to a particular task, domain, or organizational need. This allows businesses to transform general-purpose AI into highly specialized tools that understand their unique requirements, terminology, and processes, delivering significantly improved performance and accuracy for domain-specific applications.
+              </p>
+            </div>
+
+            <div class="service-content-grid">
+              <div class="content-section">
+                <div class="section-header">
+                  <div class="section-icon">🎯</div>
+                  <h4 class="section-title">What is Model Fine-Tuning?</h4>
+                </div>
+                <div class="section-content">
+                  <p>Fine-tuning leverages the foundational knowledge of a pre-trained model while adapting it to excel in specific business contexts. Rather than training a model from scratch, this approach builds upon existing capabilities, making it both cost-effective and highly efficient. The process involves exposing the model to carefully curated datasets that reflect your organization's unique language, processes, and requirements.</p>
+                </div>
+              </div>
+
+              <div class="content-section">
+                <div class="section-header">
+                  <div class="section-icon">⚡</div>
+                  <h4 class="section-title">Why Choose Model Fine-Tuning?</h4>
+                </div>
+                <div class="section-content">
+                  <div class="benefits-grid">
+                    <div class="benefit-item">
+                      <div class="benefit-icon">🎯</div>
+                      <div class="benefit-content">
+                        <h5>Enhanced Accuracy & Relevance</h5>
+                        <p>Significantly improved performance on specific tasks with more accurate and contextually appropriate outputs for your domain.</p>
+                      </div>
+                    </div>
+                    <div class="benefit-item">
+                      <div class="benefit-icon">🏥</div>
+                      <div class="benefit-content">
+                        <h5>Domain-Specific Expertise</h5>
+                        <p>Gain nuanced expertise in specialized domains like healthcare, finance, or legal by training on industry-specific datasets.</p>
+                      </div>
+                    </div>
+                    <div class="benefit-item">
+                      <div class="benefit-icon">💰</div>
+                      <div class="benefit-content">
+                        <h5>Cost-Effectiveness</h5>
+                        <p>More economical than training from scratch, leveraging pre-trained knowledge while requiring less computational power and data.</p>
+                      </div>
+                    </div>
+                    <div class="benefit-item">
+                      <div class="benefit-icon">🔒</div>
+                      <div class="benefit-content">
+                        <h5>Data Privacy & Compliance</h5>
+                        <p>Ensure models adhere to data compliance standards by fine-tuning on proprietary or regulated data within your control.</p>
+                      </div>
+                    </div>
+                    <div class="benefit-item">
+                      <div class="benefit-icon">🎲</div>
+                      <div class="benefit-content">
+                        <h5>Rare Scenario Handling</h5>
+                        <p>Address rare but crucial business-specific scenarios that general LLMs might not handle optimally.</p>
+                      </div>
+                    </div>
+                    <div class="benefit-item">
+                      <div class="benefit-icon">🔧</div>
+                      <div class="benefit-content">
+                        <h5>Customization & Control</h5>
+                        <p>Full control over model behavior, ensuring alignment with specific business objectives and brand guidelines.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="use-cases-section">
+              <div class="section-header">
+                <div class="section-icon">🚀</div>
+                <h4 class="section-title">Key Business Use Cases</h4>
+              </div>
+              
+              <div class="accordion-container">
+                <div class="accordion-item">
+                  <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-title">
+                      <span class="accordion-icon">📄</span>
+                      <span>Document Summarization</span>
+                    </div>
+                    <div class="accordion-toggle">+</div>
+                  </div>
+                  <div class="accordion-content">
+                    <p>Fine-tuned models efficiently distill lengthy reports, emails, and business documents, facilitating quicker decision-making and knowledge understanding. Perfect for corporate environments where information accessibility and comprehension are crucial.</p>
+                  </div>
+                </div>
+
+                <div class="accordion-item">
+                  <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-title">
+                      <span class="accordion-icon">💭</span>
+                      <span>Sentiment Analysis</span>
+                    </div>
+                    <div class="accordion-toggle">+</div>
+                  </div>
+                  <div class="accordion-content">
+                    <p>Accurately analyze and understand sentiment expressed in customer feedback, social media posts, and product reviews. Gain valuable business insights to improve products, services, and customer satisfaction.</p>
+                  </div>
+                </div>
+
+                <div class="accordion-item">
+                  <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-title">
+                      <span class="accordion-icon">🎧</span>
+                      <span>Customer Service Automation</span>
+                    </div>
+                    <div class="accordion-toggle">+</div>
+                  </div>
+                  <div class="accordion-content">
+                    <p>Enhance chatbots and virtual assistants to provide more accurate and contextually relevant responses to customer inquiries, improving customer experience while reducing support costs.</p>
+                  </div>
+                </div>
+
+                <div class="accordion-item">
+                  <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-title">
+                      <span class="accordion-icon">✍️</span>
+                      <span>Content Generation</span>
+                    </div>
+                    <div class="accordion-toggle">+</div>
+                  </div>
+                  <div class="accordion-content">
+                    <p>Generate high-quality, on-brand content that aligns with specific company guidelines and tone of voice. Perfect for marketing materials, documentation, and internal communications.</p>
+                  </div>
+                </div>
+
+                <div class="accordion-item">
+                  <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-title">
+                      <span class="accordion-icon">💻</span>
+                      <span>Code Generation & Completion</span>
+                    </div>
+                    <div class="accordion-toggle">+</div>
+                  </div>
+                  <div class="accordion-content">
+                    <p>Fine-tune models to generate code in specific programming languages or complete code snippets based on internal coding standards, accelerating development workflows and ensuring consistency.</p>
+                  </div>
+                </div>
+
+                <div class="accordion-item">
+                  <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-title">
+                      <span class="accordion-icon">⚖️</span>
+                      <span>Medical & Legal Document Processing</span>
+                    </div>
+                    <div class="accordion-toggle">+</div>
+                  </div>
+                  <div class="accordion-content">
+                    <p>Extract key information, summarize findings, and ensure compliance within highly regulated industries by training models on specialized medical or legal texts while maintaining strict confidentiality.</p>
+                  </div>
+                </div>
+
+                <div class="accordion-item">
+                  <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-title">
+                      <span class="accordion-icon">🔍</span>
+                      <span>Internal Knowledge Retrieval</span>
+                    </div>
+                    <div class="accordion-toggle">+</div>
+                  </div>
+                  <div class="accordion-content">
+                    <p>Create intelligent systems that quickly and accurately retrieve information from vast internal documentation and knowledge bases, making organizational knowledge more accessible and actionable.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="expertise-section">
+              <div class="expertise-content">
+                <div class="expertise-icon">🎯</div>
+                <div class="expertise-text">
+                  <h4>Our Expertise</h4>
+                  <p>We specialize in implementing advanced fine-tuning techniques including Parameter-Efficient Fine-Tuning (PEFT), instruction fine-tuning, and model distillation. Our approach ensures optimal balance between accuracy and efficiency while maintaining cost-effectiveness. We help you select the right base model, curate high-quality training datasets, and implement robust evaluation frameworks to achieve superior performance on your specific business tasks.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Service 3: Intelligent RAG Pipelines -->
+          <div class="service-card enhanced-card">
+            <div class="service-header">
+              <div class="service-number">3</div>
+              <div>
+                <h3 class="service-title">Intelligent RAG Pipelines</h3>
+                <p class="service-subtitle">Knowledge-Enhanced AI Systems</p>
+              </div>
+            </div>
+            
+            <div class="service-intro">
+              <p class="service-description">
+                We design and implement intelligent Retrieval-Augmented Generation (RAG) pipelines that enhance LLMs with external knowledge. Our smart RAG systems retrieve information from your knowledge bases in real-time, providing more accurate, contextually relevant, and up-to-date responses while maintaining data privacy and reducing AI hallucinations.
+              </p>
+            </div>
+
+            <div class="service-content-grid">
+              <div class="content-section">
+                <div class="section-header">
+                  <div class="section-icon">🔍</div>
+                  <h4 class="section-title">What are Intelligent RAG Pipelines?</h4>
+                </div>
+                <div class="section-content">
+                  <p>Intelligent RAG pipelines combine the power of large language models with real-time access to your organization's knowledge base. Unlike traditional AI systems that rely solely on training data, RAG systems dynamically retrieve relevant information from your documents, databases, and knowledge repositories to provide accurate, up-to-date responses grounded in your specific business context.</p>
+                </div>
+              </div>
+
+              <div class="content-section">
+                <div class="section-header">
+                  <div class="section-icon">⚡</div>
+                  <h4 class="section-title">Why Choose Intelligent RAG Pipelines?</h4>
+                </div>
+                <div class="section-content">
+                  <div class="benefits-grid">
+                    <div class="benefit-item">
+                      <div class="benefit-icon">⚡</div>
+                      <div class="benefit-content">
+                        <h5>Real-time Data Access</h5>
+                        <p>Access the most current information from your knowledge base without retraining models, ensuring responses are always up-to-date.</p>
+                      </div>
+                    </div>
+                    <div class="benefit-item">
+                      <div class="benefit-icon">🔒</div>
+                      <div class="benefit-content">
+                        <h5>Data Privacy & Security</h5>
+                        <p>Keep sensitive information secure while leveraging AI capabilities with on-premises deployment and controlled access.</p>
+                      </div>
+                    </div>
+                    <div class="benefit-item">
+                      <div class="benefit-icon">🎯</div>
+                      <div class="benefit-content">
+                        <h5>Reduced Hallucinations</h5>
+                        <p>Ground AI responses in factual information to minimize incorrect or fabricated outputs, ensuring reliability.</p>
+                      </div>
+                    </div>
+                    <div class="benefit-item">
+                      <div class="benefit-icon">💰</div>
+                      <div class="benefit-content">
+                        <h5>Cost-Effective Solution</h5>
+                        <p>Avoid expensive model retraining by updating knowledge bases instead of fine-tuning, reducing operational costs.</p>
+                      </div>
+                    </div>
+                    <div class="benefit-item">
+                      <div class="benefit-icon">🔍</div>
+                      <div class="benefit-content">
+                        <h5>Enhanced Transparency</h5>
+                        <p>Trace AI responses back to source documents for better trust and accountability in decision-making processes.</p>
+                      </div>
+                    </div>
+                    <div class="benefit-item">
+                      <div class="benefit-icon">⚙️</div>
+                      <div class="benefit-content">
+                        <h5>Developer Control</h5>
+                        <p>Fine-tune retrieval mechanisms and customize knowledge integration for your specific business needs and requirements.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="use-cases-section">
+              <div class="section-header">
+                <div class="section-icon">🚀</div>
+                <h4 class="section-title">Key Business Use Cases</h4>
+              </div>
+              
+              <div class="accordion-container">
+                <div class="accordion-item">
+                  <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-title">
+                      <span class="accordion-icon">🔍</span>
+                      <span>Enterprise Search & Knowledge Discovery</span>
+                    </div>
+                    <div class="accordion-toggle">+</div>
+                  </div>
+                  <div class="accordion-content">
+                    <p>Transform your organization's knowledge base into an intelligent search system. Enable employees to quickly find relevant information across documents, databases, and internal resources with natural language queries.</p>
+                  </div>
+                </div>
+
+                <div class="accordion-item">
+                  <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-title">
+                      <span class="accordion-icon">🤖</span>
+                      <span>Advanced Chatbots & Virtual Assistants</span>
+                    </div>
+                    <div class="accordion-toggle">+</div>
+                  </div>
+                  <div class="accordion-content">
+                    <p>Build intelligent conversational AI that provides accurate, contextual responses by accessing your knowledge base in real-time. Perfect for customer support, internal help desks, and specialized domain assistance.</p>
+                  </div>
+                </div>
+
+                <div class="accordion-item">
+                  <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-title">
+                      <span class="accordion-icon">📞</span>
+                      <span>Customer Service Enhancement</span>
+                    </div>
+                    <div class="accordion-toggle">+</div>
+                  </div>
+                  <div class="accordion-content">
+                    <p>Empower customer service representatives with AI-powered knowledge retrieval. Instantly access product information, troubleshooting guides, and customer history to provide faster, more accurate support.</p>
+                  </div>
+                </div>
+
+                <div class="accordion-item">
+                  <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-title">
+                      <span class="accordion-icon">📚</span>
+                      <span>Dynamic Knowledge Management</span>
+                    </div>
+                    <div class="accordion-toggle">+</div>
+                  </div>
+                  <div class="accordion-content">
+                    <p>Create living knowledge bases that automatically update and provide contextual information. Ideal for compliance documentation, policy management, and organizational knowledge sharing.</p>
+                  </div>
+                </div>
+
+                <div class="accordion-item">
+                  <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-title">
+                      <span class="accordion-icon">🏥</span>
+                      <span>Healthcare & Legal Document Processing</span>
+                    </div>
+                    <div class="accordion-toggle">+</div>
+                  </div>
+                  <div class="accordion-content">
+                    <p>Process complex medical records, legal documents, and regulatory materials with precision. Extract relevant information while maintaining compliance and confidentiality requirements.</p>
+                  </div>
+                </div>
+
+                <div class="accordion-item">
+                  <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-title">
+                      <span class="accordion-icon">🎯</span>
+                      <span>Personalized AI Assistants</span>
+                    </div>
+                    <div class="accordion-toggle">+</div>
+                  </div>
+                  <div class="accordion-content">
+                    <p>Develop AI assistants that understand your specific business context and provide personalized recommendations based on your data, processes, and organizational knowledge.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="expertise-section">
+              <div class="expertise-content">
+                <div class="expertise-icon">🎯</div>
+                <div class="expertise-text">
+                  <h4>Our Expertise</h4>
+                  <p>We specialize in building sophisticated RAG pipelines with advanced techniques including hybrid search, re-ranking algorithms, and multi-step reasoning. We implement state-of-the-art vector databases, semantic chunking strategies, and intelligent query routing to ensure optimal performance and accuracy for your specific use case. Our approach combines cutting-edge retrieval methods with robust evaluation frameworks to deliver enterprise-grade RAG solutions.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Service 4: Custom AI Agents & Workflow Automation -->
+          <div class="service-card">
+            <div class="service-header">
+              <div class="service-number">4</div>
+              <div>
+                <h3 class="service-title">Custom AI Agents & Workflow Automation</h3>
+                <p class="service-subtitle">Intelligent Process Automation</p>
+              </div>
+            </div>
+            
+            <p class="service-description">
+              We build custom AI agents and automate complex business workflows to drive efficiency and innovation. Our AI agents perform a wide range of tasks, integrating seamlessly with your existing systems to automate repetitive processes.
+            </p>
+            
+            <div class="service-features">
+              <div class="feature-item">We identify opportunities for automation and workflow optimization</div>
+              <div class="feature-item">Our AI agents are designed to perform a wide range of tasks</div>
+              <div class="feature-item">Integrate seamlessly with your existing systems and workflows</div>
+              <div class="feature-item">Adaptive decision-making and intelligent process automation</div>
+            </div>
+            
+            <div class="impact-section">
+              <h4 class="impact-title">Business Impact</h4>
+              <p class="impact-description">
+                Free up your employees to focus on strategic and creative work by automating repetitive tasks, increasing productivity and reducing operational costs.
+              </p>
+            </div>
+          </div>
+
+          <!-- Service 5: AI Data Analysis Agents -->
+          <div class="service-card">
+            <div class="service-header">
+              <div class="service-number">5</div>
+              <div>
+                <h3 class="service-title">AI Data Analysis Agents</h3>
+                <p class="service-subtitle">Autonomous Intelligence & Insights</p>
+              </div>
+            </div>
+            
+            <p class="service-description">
+              We develop AI-powered data analysis agents that autonomously collect, clean, analyze, and visualize data to uncover valuable insights. These agents connect to various data sources and generate reports with actionable recommendations.
+            </p>
+            
+            <div class="service-features">
+              <div class="feature-item">Autonomous data collection, cleaning, and analysis processes</div>
+              <div class="feature-item">Connect to various data sources and perform complex statistical analysis</div>
+              <div class="feature-item">Generate reports with actionable recommendations and insights</div>
+              <div class="feature-item">Real-time dashboard generation and data visualization</div>
+            </div>
+            
+            <div class="impact-section">
+              <h4 class="impact-title">Business Impact</h4>
+              <p class="impact-description">
+                Accelerate your data-to-insight cycle and democratize access to data insights across your organization, identifying trends that human analysts might miss.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <div class="container">
+        <h2 class="cta-title">Ready to Transform Your Business?</h2>
+        <p class="cta-description">
+          Let's discuss how our AI solutions can drive innovation and efficiency in your organization while keeping your data secure and your competitive advantage in-house.
+        </p>
+        <a href="mailto:hello@asymmetriclabs.ai" class="btn btn-primary">
+          Start Your AI Journey
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+          </svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-title">Asymmetric Labs</div>
+        <p class="footer-subtitle">Private AI Assistants for Enterprises</p>
+        <div class="footer-copyright">© 2025 Asymmetric Labs. All rights reserved.</div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Three.js background animation
+    let scene, camera, renderer, particles;
+
+    function init() {
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      renderer = new THREE.WebGLRenderer({ alpha: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.getElementById('three-container').appendChild(renderer.domElement);
+
+      // Create particles
+      const geometry = new THREE.BufferGeometry();
+      const vertices = [];
+      const colors = [];
+
+      for (let i = 0; i < 1000; i++) {
+        vertices.push(
+          (Math.random() - 0.5) * 2000,
+          (Math.random() - 0.5) * 2000,
+          (Math.random() - 0.5) * 2000
+        );
+
+        colors.push(
+          Math.random() * 0.5 + 0.5,
+          Math.random() * 0.5 + 0.5,
+          1
+        );
+      }
+
+      geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+      geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+
+      const material = new THREE.PointsMaterial({
+        size: 2,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.6
+      });
+
+      particles = new THREE.Points(geometry, material);
+      scene.add(particles);
+
+      camera.position.z = 1000;
+
+      animate();
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      particles.rotation.x += 0.0005;
+      particles.rotation.y += 0.001;
+
+      renderer.render(scene, camera);
+    }
+
+    function onWindowResize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    window.addEventListener('resize', onWindowResize);
+
+    // Initialize when page loads
+    window.addEventListener('load', init);
+
+    // Accordion functionality
+    function toggleAccordion(header) {
+      const item = header.parentElement;
+      const content = item.querySelector('.accordion-content');
+      const isActive = item.classList.contains('active');
+      
+      // Close all accordion items
+      document.querySelectorAll('.accordion-item').forEach(accordionItem => {
+        accordionItem.classList.remove('active');
+      });
+      
+      // Open clicked item if it wasn't active
+      if (!isActive) {
+        item.classList.add('active');
+      }
+    }
+  </script>
+</body>
+</html>
