@@ -378,6 +378,20 @@
             margin-bottom: 2rem;
         }
 
+        .footer-links {
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            color: rgb(165, 180, 252);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: rgb(196, 181, 253);
+        }
+
         .footer-copyright {
             font-size: 0.875rem;
             color: rgb(107, 114, 128);
@@ -531,6 +545,32 @@
                 height: 28px;
             }
         }
+
+        /* Navbar Button Styling */
+        .navbar-nav .btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            border-radius: 6px;
+            margin-left: 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-nav .btn svg {
+            width: 0.875rem;
+            height: 0.875rem;
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-nav .btn:hover svg {
+            transform: translateX(2px);
+        }
+
+        .navbar-nav .btn::after {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -544,6 +584,8 @@
             <ul class="navbar-nav">
                 <li><a href="index.html" class="active">Home</a></li>
                 <li><a href="services.html">Services</a></li>
+                <li><a href="https://calendly.com/pratheek-asmlabs/30min" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Schedule a Briefing <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg></a></li>
+                
             </ul>
         </div>
     </nav>
@@ -799,7 +841,7 @@
                 </div>
                 
                 <div style="text-align: center; margin-top: 2.5rem;">
-                    <a href="services.html" class="btn btn-primary">View detailed services <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg></a>
+                    <a href="services.html" class="btn btn-primary">More details <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg></a>
                 </div>
 
                 <div style="text-align: center; margin-top: 1.25rem;">
@@ -926,16 +968,7 @@
             </div>
         </section>
 
-        <!-- Footer -->
-        <footer class="footer">
-            <div class="container">
-                <div class="footer-title">Asymmetric Labs</div>
-                <p class="footer-subtitle">Private AI Assistants for Enterprises</p>
-                <div class="footer-copyright">
-                    © 2025 Asymmetric Labs. All rights reserved.
-                </div>
-            </div>
-        </footer>
+        
     </div>
 
     <script>
@@ -1144,5 +1177,17 @@
             initButtonEffects();
         });
     </script>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-title">Asymmetric Labs</div>
+            <p class="footer-subtitle">Private AI Assistants for Enterprises</p>
+            <div class="footer-links">
+                <a href="privacy-policy.html">Privacy Policy</a>
+            </div>
+            <div class="footer-copyright">© 2025 Asymmetric Labs. All rights reserved.</div>
+        </div>
+    </footer>
 </body>
 </html>
