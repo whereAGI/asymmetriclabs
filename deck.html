@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asymmetric Labs — AI, On Your Terms</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'deep-space': '#0E0E1A',
+                        'surface-elevation': '#151527',
+                        'card-surface': '#191B2E',
+                        primary: '#6E6BE8',
+                        accent: '#C9C2FF',
+                        electric: '#7C7AFF',
+                        emerald: '#20D3A6',
+                        amber: '#FFC857',
+                        'text-primary': '#E6E7F2',
+                        'text-secondary': '#A6A8C6',
+                        border: '#24263A',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'gradient-primary': 'linear-gradient(135deg, #6E6BE8 0%, #7C7AFF 100%)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0E0E1A;
+            color: #E6E7F2;
+        }
+        
+        .card-glow {
+            box-shadow: 0 0 20px rgba(110, 107, 232, 0.1);
+        }
+        
+        .section-pattern::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(circle at 20% 30%, rgba(110, 107, 232, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+            .fade-in {
+                transition: none;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Navigation -->
+    <nav class="fixed w-full bg-surface-elevation/90 backdrop-blur-md z-50 border-b border-border/50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i data-feather="cpu" class="text-electric"></i>
+                <span class="font-semibold text-lg">Asymmetric Labs</span>
+            </div>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#why" class="text-text-secondary hover:text-text-primary transition">Why</a>
+                <a href="#what" class="text-text-secondary hover:text-text-primary transition">What</a>
+                <a href="#how" class="text-text-secondary hover:text-text-primary transition">How</a>
+                <a href="#use-cases" class="text-text-secondary hover:text-text-primary transition">Use Cases</a>
+                <a href="#security" class="text-text-secondary hover:text-text-primary transition">Security</a>
+                <a href="#models" class="text-text-secondary hover:text-text-primary transition">Models</a>
+                <a href="#plan" class="text-text-secondary hover:text-text-primary transition">Plan</a>
+                <button class="bg-gradient-primary px-6 py-2 rounded-full text-white font-medium hover:shadow-lg transition">Schedule Briefing</button>
+            </div>
+            <button class="md:hidden text-text-secondary">
+                <i data-feather="menu"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="min-h-screen flex items-center justify-center relative overflow-hidden">
+        <div id="vanta-globe" class="absolute inset-0"></div>
+        <div class="max-w-7xl mx-auto px-6 py-24 relative z-10">
+            <div class="max-w-3xl mx-auto text-center fade-in">
+                <h1 class="text-5xl md:text-6xl font-bold mb-6">AI, On Your Terms</h1>
+                <p class="text-xl md:text-2xl text-text-secondary mb-10">Enterprise-grade privacy and performance with self-hosted open-source models, intelligent RAG, fine-tuning, and agents—deployed on client infrastructure.</p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <button class="bg-gradient-primary px-8 py-3 rounded-full text-white font-medium hover:shadow-lg transition">Get Started</button>
+                    <button class="border border-electric/50 px-8 py-3 rounded-full text-electric font-medium hover:bg-electric/10 transition">Our Security</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Section -->
+    <section id="why" class="py-20 section-pattern relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16 fade-in">
+                <span class="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">WHY</span>
+                <h2 class="text-4xl font-bold mb-6">Privacy as a Strategic Pillar</h2>
+                <p class="max-w-3xl mx-auto text-lg text-text-secondary">IP, customer data, and proprietary processes must be protected from third-party training and opaque data handling.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-card-surface rounded-xl p-8 border border-border card-glow fade-in">
+                    <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6">
+                        <i data-feather="shield" class="text-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Risk Mitigation</h3>
+                    <p class="text-text-secondary">Public AI introduces data-egress, vendor lock-in, and limited observability that conflict with sovereignty and compliance at scale.</p>
+                </div>
+                
+                <div class="bg-card-surface rounded-xl p-8 border border-border card-glow fade-in">
+                    <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6">
+                        <i data-feather="trending-up" class="text-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Production Imperative</h3>
+                    <p class="text-text-secondary">Enterprises are moving from pilots to production and require verifiable governance and auditability to capture durable value.</p>
+                </div>
+                
+                <div class="bg-card-surface rounded-xl p-8 border border-border card-glow fade-in">
+                    <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6">
+                        <i data-feather="lock" class="text-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Data Sovereignty</h3>
+                    <p class="text-text-secondary">Data, prompts, logs, and model weights remain inside the organization with full auditability and policy-aligned governance.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What Section -->
+    <section id="what" class="py-20 bg-surface-elevation">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16 fade-in">
+                <span class="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">WHAT</span>
+                <h2 class="text-4xl font-bold mb-6">Self-Hosted AI Infrastructure</h2>
+                <p class="max-w-3xl mx-auto text-lg text-text-secondary">We deploy and operate open-weight LLMs on client cloud or on-prem, with encryption and network isolation.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8 mb-16">
+                <div class="fade-in">
+                    <img src="http://static.photos/technology/1024x576/42" alt="AI Architecture" class="rounded-xl w-full h-auto object-cover border border-border">
+                </div>
+                <div class="fade-in">
+                    <h3 class="text-2xl font-semibold mb-4">Complete In-Network Systems</h3>
+                    <p class="text-text-secondary mb-6">Retrieval, vector/graph stores, model gateways, and observability live inside the client's VPC or data center with governed connectors to documents, data warehouses, and line-of-business systems.</p>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i data-feather="check-circle" class="text-emerald mr-2 mt-0.5"></i>
+                            <span class="text-text-primary">Encrypted memory with Nitro Enclaves</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i data-feather="check-circle" class="text-emerald mr-2 mt-0.5"></i>
+                            <span class="text-text-primary">Remote attestation and measured boot</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i data-feather="check-circle" class="text-emerald mr-2 mt-0.5"></i>
+                            <span class="text-text-primary">Role-based access and retention controls</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-card-surface rounded-xl p-6 border border-border card-glow fade-in">
+                    <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                        <i data-feather="database" class="text-primary"></i>
+                    </div>
+                    <h4 class="font-semibold mb-2">Auditability</h4>
+                    <p class="text-sm text-text-secondary">Prompt, context, retrieval, and output logs are captured with role-based access controls.</p>
+                </div>
+                <div class="bg-card-surface rounded-xl p-6 border border-border card-glow fade-in">
+                    <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                        <i data-feather="cpu" class="text-primary"></i>
+                    </div>
+                    <h4 class="font-semibold mb-2">Confidential Compute</h4>
+                    <p class="text-sm text-text-secondary">Support for CPU/GPU TEEs and confidential accelerators on major clouds.</p>
+                </div>
+                <div class="bg-card-surface rounded-xl p-6 border border-border card-glow fade-in">
+                    <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                        <i data-feather="shield" class="text-primary"></i>
+                    </div>
+                    <h4 class="font-semibold mb-2">Compliance</h4>
+                    <p class="text-sm text-text-secondary">Aligns to sectoral regimes such as GDPR/HIPAA expectations.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How Section -->
+    <section id="how" class="py-20 section-pattern relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16 fade-in">
+                <span class="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">HOW</span>
+                <h2 class="text-4xl font-bold mb-6">Open-Source, Enterprise-Ready</h2>
+                <p class="max-w-3xl mx-auto text-lg text-text-secondary">We use top open-weights like Qwen 3, DeepSeek V3, GLM 4.5, and Kimi K2, then tailor with fine-tuning, RAG, and agents.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-4 gap-6 mb-12">
+                <div class="bg-card-surface rounded-xl p-6 border border-border card-glow fade-in">
+                    <h4 class="font-semibold mb-2">Private RAG</h4>
+                    <p class="text-sm text-text-secondary">Hybrid or graph retrieval with citation enforcement and runtime hallucination detection.</p>
+                </div>
+                <div class="bg-card-surface rounded-xl p-6 border border-border card-glow fade-in">
+                    <h4 class="font-semibold mb-2">Secure Fine-Tuning</h4>
+                    <p class="text-sm text-text-secondary">PEFT/LoRA pipelines run inside client environments to align outputs with domain terminology.</p>
+                </div>
+                <div class="bg-card-surface rounded-xl p-6 border border-border card-glow fade-in">
+                    <h4 class="font-semibold mb-2">Agentic Workflows</h4>
+                    <p class="text-sm text-text-secondary">Integrate with ERP/CRM and internal systems under policy controls.</p>
+                </div>
+                <div class="bg-card-surface rounded-xl p-6 border border-border card-glow fade-in">
+                    <h4 class="font-semibold mb-2">Routing Policy</h4>
+                    <p class="text-sm text-text-secondary">Models selected by sensitivity, performance, and cost with uniform logging.</p>
+                </div>
+            </div>
+            
+            <div class="bg-card-surface rounded-xl p-8 border border-border card-glow fade-in">
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4">Model Performance Benchmarks</h3>
+                        <p class="text-text-secondary mb-6">Our open-weight models deliver frontier-grade capability without proprietary APIs.</p>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm font-medium">Reasoning</span>
+                                    <span class="text-sm text-emerald">93%</span>
+                                </div>
+                                <div class="w-full bg-border rounded-full h-2">
+                                    <div class="bg-primary h-2 rounded-full" style="width: 93%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm font-medium">Coding</span>
+                                    <span class="text-sm text-emerald">89%</span>
+                                </div>
+                                <div class="w-full bg-border rounded-full h-2">
+                                    <div class="bg-primary h-2 rounded-full" style="width: 89%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm font-medium">Multilingual</span>
+                                    <span class="text-sm text-emerald">87%</span>
+                                </div>
+                                <div class="w-full bg-border rounded-full h-2">
+                                    <div class="bg-primary h-2 rounded-full" style="width: 87%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-primary/5 p-4 rounded-lg border border-border/50">
+                            <div class="text-primary font-medium mb-2">Qwen 3</div>
+                            <div class="text-xs text-text-secondary">0.6B to 235B-A22B</div>
+                        </div>
+                        <div class="bg-primary/5 p-4 rounded-lg border border-border/50">
+                            <div class="text-primary font-medium mb-2">DeepSeek V3</div>
+                            <div class="text-xs text-text-secondary">671B MoE</div>
+                        </div>
+                        <div class="bg-primary/5 p-4 rounded-lg border border-border/50">
+                            <div class="text-primary font-medium mb-2">GLM 4.5</div>
+                            <div class="text-xs text-text-secondary">Text & VL variants</div>
+                        </div>
+                        <div class="bg-primary/5 p-4 rounded-lg border border-border/50">
+                            <div class="text-primary font-medium mb-2">Kimi K2</div>
+                            <div class="text-xs text-text-secondary">~32B activated</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases Section -->
+    <section id="use-cases" class="py-20 bg-surface-elevation">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16 fade-in">
+                <span class="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">IMPACT</span>
+                <h2 class="text-4xl font-bold mb-6">Measurable Outcomes</h2>
+                <p class="max-w-3xl mx-auto text-lg text-text-secondary">Faster, safer decisions and lower unit costs with citable outputs and confidential inference.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                <div class="bg-card-surface rounded-xl p-8 border border-border card-glow fade-in">
+                    <div class="flex items-start mb-6">
+                        <div class="w-14 h-14 rounded-lg bg-emerald/10 flex items-center justify-center mr-4 flex-shrink-0">
+                            <i data-feather="dollar-sign" class="text-emerald"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2">Financial Services</h3>
+                            <p class="text-text-secondary">40–60% AHT reduction and higher first-contact resolution for RAG voice agents.</p>
+                        </div>
+                    </div>
+                    <div class="pl-18">
+                        <p class="text-sm text-text-secondary mb-4">Problem: High AHT, compliance logging gaps, and fragmented knowledge across systems.</p>
+                        <p class="text-sm text-text-secondary">Solution: RAG-enabled call-center and knowledge agents with conversation-level logging and redaction.</p>
+                    </div>
+                </div>
+                
+                <div class="bg-card-surface rounded-xl p-8 border border-border card-glow fade-in">
+                    <div class="flex items-start mb-6">
+                        <div class="w-14 h-14 rounded-lg bg-emerald/10 flex items-center justify-center mr-4 flex-shrink-0">
+                            <i data-feather="activity" class="text-emerald"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2">Enterprise Operations</h3>
+                            <p class="text-text-secondary">Faster cycles and fewer errors with traceable automations.</p>
+                        </div>
+                    </div>
+                    <div class="pl-18">
+                        <p class="text-sm text-text-secondary mb-4">Problem: Manual RFQs, reporting, and back-office processes across ERP/CRM cause delays and errors.</p>
+                        <p class="text-sm text-text-secondary">Solution: Agent workflows with policy controls and granular logs.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-card-surface rounded-xl p-8 border border-border card-glow fade-in">
+                    <div class="flex items-start mb-6">
+                        <div class="w-14 h-14 rounded-lg bg-emerald/10 flex items-center justify-center mr-4 flex-shrink-0">
+                            <i data-feather="heart" class="text-emerald"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2">Healthcare</h3>
+                            <p class="text-text-secondary">Higher answer quality with traceable references suitable for clinical governance.</p>
+                        </div>
+                    </div>
+                    <div class="pl-18">
+                        <p class="text-sm text-text-secondary mb-4">Problem: Need for citable, safe clinical answers with provenance.</p>
+                        <p class="text-sm text-text-secondary">Solution: Radiology-validated RAG patterns with source citation and audit trails.</p>
+                    </div>
+                </div>
+                
+                <div class="bg-card-surface rounded-xl p-8 border border-border card-glow fade-in">
+                    <div class="flex items-start mb-6">
+                        <div class="w-14 h-14 rounded-lg bg-emerald/10 flex items-center justify-center mr-4 flex-shrink-0">
+                            <i data-feather="search" class="text-emerald"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2">Knowledge Search</h3>
+                            <p class="text-text-secondary">Improved accuracy and decision speed with citable outputs.</p>
+                        </div>
+                    </div>
+                    <div class="pl-18">
+                        <p class="text-sm text-text-secondary mb-4">Problem: Stale or non-citable responses undermine trust.</p>
+                        <p class="text-sm text-text-secondary">Solution: Hybrid/graph retrieval with evaluation harnesses.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security Section -->
+    <section id="security" class="py-20 section-pattern relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16 fade-in">
+                <span class="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">SECURITY</span>
+                <h2 class="text-4xl font-bold mb-6">Architecture & Confidentiality</h2>
+                <p class="max-w-3xl mx-auto text-lg text-text-secondary">Verifiable isolation and encrypted memory with Nitro Enclaves and H100 Confidential Computing.</p>
+            </div>
+            
+            <div class="bg-card-surface rounded-xl p-8 border border-border card-glow mb-12 fade-in">
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4">Reference Stack</h3>
+                        <ul class="space-y-3 text-text-secondary">
+                            <li class="flex items-start">
+                                <i data-feather="chevron-right" class="text-primary mr-2 mt-0.5"></i>
+                                <span>Model Gateway</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i data-feather="chevron-right" class="text-primary mr-2 mt-0.5"></i>
+                                <span>Retrieval Tier</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i data-feather="chevron-right" class="text-primary mr-2 mt-0.5"></i>
+                                <span>Vector/Graph Store</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i data-feather="chevron-right" class="text-primary mr-2 mt-0.5"></i>
+                                <span>Policy Engine</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i data-feather="chevron-right" class="text-primary mr-2 mt-0.5"></i>
+                                <span>Observability Stack</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4">Platform Options</h3>
+                        <ul class="space-y-3 text-text-secondary">
+                            <li class="flex items-start">
+                                <i data-feather="chevron-right" class="text-primary mr-2 mt-0.5"></i>
+                                <span>In-VPC/on-prem deployment</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i data-feather="chevron-right" class="text-primary mr-2 mt-0.5"></i>
+                                <span>CPU/GPU TEEs</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i data-feather="chevron-right" class="text-primary mr-2 mt-0.5"></i>
+                                <span>Confidential accelerators</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i data-feather="chevron-right" class="text-primary mr-2 mt-0.5"></i>
+                                <span>Remote attestation</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i data-feather="chevron-right" class="text-primary mr-2 mt-0.5"></i>
+                                <span>Measured boot</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4">Trust Badges</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center bg-primary/5 rounded-lg p-3">
+                                <i data-feather="shield" class="text-primary mr-3"></i>
+                                <span>No Data Leaves Your Infrastructure</span>
+                            </div>
+                            <div class="flex items-center bg-primary/5 rounded-lg p-3">
+                                <i data-feather="lock" class="text-primary mr-3"></i>
+                                <span>Confidential Inference Enabled</span>
+                            </div>
+                            <div class="flex items-center bg-primary/5 rounded-lg p-3">
+                                <i data-feather="file-text" class="text-primary mr-3"></i>
+                                <span>Citations On by Default</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center fade-in">
+                <button class="border border-electric/50 px-8 py-3 rounded-full text-electric font-medium hover:bg-electric/10 transition mx-2">
+                    Request Security Overview
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Models Section -->
+    <section id="models" class="py-20 bg-surface-elevation">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16 fade-in">
+                <span class="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">MODELS</span>
+                <h2 class="text-4xl font-bold mb-6">Open-Source Weights We Deploy</h2>
+                <p class="max-w-3xl mx-auto text-lg text-text-secondary">Models are selected by sensitivity, performance, and cost, with uniform logging and guardrails.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                <div class="bg-card-surface rounded-xl p-8 border border-border card-glow fade-in">
+                    <div class="flex items-start mb-6">
+                        <div class="w-14 h-14 rounded-lg bg-primary/10 flex items-center justify-center mr-4 flex-shrink-0">
+                            <span class="text-primary font-medium">Q3</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2">Qwen 3</h3>
+                            <p class="text-text-secondary">Family of dense and MoE open-weights from 0.6B to 235B-A22B with thinking/non-thinking modes.</p>
+                        </div>
+                    </div>
+                    <div class="pl-18">
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 rounded-full bg-primary/10 text-primary text-xs">Strong coding</span>
+                            <span class="px-2 py-1 rounded-full bg-primary/10 text-primary text-xs">Math</span>
+                            <span class="px-2 py-1 rounded-full bg-primary/10 text-primary text-xs">Multilingual</span>
+                            <span class="px-2 py-1 rounded-full bg-primary/10 text-primary text-xs">Expert tool-use</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-card-surface rounded-xl p-8 border border-border card-glow fade-in">
+                    <div class="flex items-start mb-6">
+                        <div class="w-14 h-14 rounded-lg bg-primary/10 flex items-center justify-center mr-4 flex-shrink-0">
+                            <span class="text-primary font-medium">DS</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2">DeepSeek V3</h3>
+                            <p class="text-text-secondary">671B MoE with about 37B activated per token, MLA attention, and multi-token prediction.</p>
+                        </div>
+                    </div>
+                    <div class="pl-18">
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 rounded-full bg-primary/10 text-primary text-xs">Competitive reasoning</span>
+                            <span class="px-2 py-1 rounded-full bg-primary/10 text-primary text-xs">Coding</span>
+                            <span class="px-2 py-1 rounded-full bg-primary/10 text-primary text-xs">SFT/RL stages</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-card-surface rounded-xl p-8 border border-border card-glow fade-in">
+                    <div class="flex items-start mb-6">
+                        <div class="w-14 h-14 rounded-lg bg-primary/10 flex items-center justify-center mr-4 flex-shrink-0">
+                            <span class="text-primary font-medium">GLM</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2">GLM 4.5</h3>
+                            <p class="text-text-secondary">Text and vision-language variants with reasoning features and strong multimodal performance.</p>
+                        </div>
+                    </div>
+                    <div class="pl-18">
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 rounded-full bg-primary/10 text-primary text-xs">Image understanding</span>
+                            <span class="px-2 py-1 rounded-full bg-primary/10 text-primary text-xs">Document analysis</span>
+                            <span class="px-2 py-1 rounded-full bg-primary/10 text-primary text-xs">GUI understanding</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-card-surface rounded-xl p-8 border border-border card-glow fade-in">
+                    <div class="flex items-start mb-6">
+                        <div class="w-14 h-14 rounded-lg bg-primary/10 flex items-center justify-center mr-4 flex-shrink-0">
+                            <span class="text-primary font-medium">KK</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2">Kimi K2</h3>
+                            <p class="text-text-secondary">Open-weight trillion-param MoE with around 32B activated per token.</p>
+                        </div>
+                    </div>
+                    <div class="pl-18">
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 rounded-full bg-primary/10 text-primary text-xs">Agentic</span>
+                            <span class="px-2 py-1 rounded-full bg-primary/10 text-primary text-xs">Coding</span>
+                            <span class="px-2 py-1 rounded-full bg-primary/10 text-primary text-xs">Reasoning</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Plan Section -->
+    <section id="plan" class="py-20 section-pattern relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16 fade-in">
+                <span class="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">PLAN</span>
+                <h2 class="text-4xl font-bold mb-6">90-Day Implementation</h2>
+                <p class="max-w-3xl mx-auto text-lg text-text-secondary">Precision/coverage/latency harnesses with regression testing for updates to retrieval, fine-tuning, or guardrails.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-6 mb-12">
+                <div class="bg-card-surface rounded-xl p-6 border border-border card-glow fade-in">
+                    <div class="text-primary font-medium mb-2">Weeks 0-2</div>
+                    <h3 class="text-lg font-semibold mb-3">Discovery & Risk Map</h3>
+                    <p class="text-sm text-text-secondary">Prioritize 1-2 workflows, define KPIs (accuracy, latency, unit cost, citation compliance).</p>
+                </div>
+                <div class="bg-card-surface rounded-xl p-6 border border-border card-glow fade-in">
+                    <div class="text-primary font-medium mb-2">Weeks 2-6</div>
+                    <h3 class="text-lg font-semibold mb-3">Sovereign LLM + RAG</h3>
+                    <p class="text-sm text-text-secondary">Deploy in-VPC with citations and hallucination detection, wire to governed connectors.</p>
+                </div>
+                <div class="bg-card-surface rounded-xl p-6 border border-border card-glow fade-in">
+                    <div class="text-primary font-medium mb-2">Weeks 6-12</div>
+                    <h3 class="text-lg font-semibold mb-3">First Agent Workflow</h3>
+                    <p class="text-sm text-text-secondary">Integrate with ERP/CRM, enforce policy controls, demonstrate measurable improvements.</p>
+                </div>
+            </div>
+            
+            <div class="text-center fade-in">
+                <h3 class="text-2xl font-semibold mb-6">Ready to deploy AI on your terms?</h3>
+                <button class="bg-gradient-primary px-8 py-3 rounded-full text-white font-medium hover:shadow-lg transition mx-2">
+                    Schedule Briefing
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 bg-surface-elevation border-t border-border/50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i data-feather="cpu" class="text-electric"></i>
+                        <span class="font-semibold">Asymmetric Labs</span>
+                    </div>
+                    <p class="text-sm text-text-secondary">Enable privacy-first AI with self-hosted open-source models.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Solutions</h4>
+                    <ul class="space-y-2 text-sm text-text-secondary">
+                        <li><a href="#" class="hover:text-text-primary transition">Private RAG</a></li>
+                        <li><a href="#" class="hover:text-text-primary transition">Secure Fine-Tuning</a></li>
+                        <li><a href="#" class="hover:text-text-primary transition">Agent Workflows</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Resources</h4>
+                    <ul class="space-y-2 text-sm text-text-secondary">
+                        <li><a href="#" class="hover:text-text-primary transition">Security Overview</a></li>
+                        <li><a href="#" class="hover:text-text-primary transition">Model Benchmarks</a></li>
+                        <li><a href="#" class="hover:text-text-primary transition">Case Studies</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Contact</h4>
+                    <ul class="space-y-2 text-sm text-text-secondary">
+                        <li class="flex items-center">
+                            <i data-feather="mail" class="mr-2 w-4 h-4"></i>
+                            <span>contact@asymmetriclabs.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-border/30">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-xs text-text-secondary mb-4 md:mb-0">© 2024 Asymmetric Labs. All rights reserved.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-text-secondary hover:text-text-primary transition"><i data-feather="github"></i></a>
+                        <a href="#" class="text-text-secondary hover:text-text-primary transition"><i data-feather="twitter"></i></a>
+                        <a href="#" class="text-text-secondary hover:text-text-primary transition"><i data-feather="linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Vanta.js globe
+        VANTA.GLOBE({
+            el: "#vanta-globe",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            scale: 1.00,
+            scaleMobile: 1.00,
+            color: 0x6e6be8,
+            backgroundColor: 0x0e0e1a,
+            size: 0.8
+        });
+        
+        // Initialize feather icons
+        feather.replace();
+        
+        // Scroll animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+            
+            fadeElements.forEach(element => {
+                observer.observe(element);
+            });
+        });
+    </script>
+</body>
+</html>
